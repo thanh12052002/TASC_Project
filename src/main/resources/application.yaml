@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/tasc
+    username: root
+    password: Thanh12052002!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate   # ch? ki?m tra mapping, không thay ??i DB
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  mvc:
+    favicon:
+      enabled: false
+
+app:
+  jwtSecret: Y7xkN3pQ9tVr5gJ2mW8sZ4dL1qT6hB9vC3nF2aR8yK5uP1oE7wJ9sM6kD4bH2xT1uV8qR5nC2dM6lW9yA3fP7tJ5
+  jwtExpirationMs: 86400000
+  jwtRefreshToken: 86400000
