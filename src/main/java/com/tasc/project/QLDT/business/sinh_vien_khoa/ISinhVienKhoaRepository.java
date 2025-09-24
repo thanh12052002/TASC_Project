@@ -9,4 +9,9 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ISinhVienKhoaRepository extends JpaRepository<SinhVienKhoa,Long> {
+
+    @Query("SELECT svk FROM SinhVienKhoa svk " +
+            "WHERE svk.sinhVien.id = :sinhVienId " +
+            "AND svk.khoa.id = :khoaId")
+    SinhVienKhoa getInfoById(@Param("sinhVienId") Long sinhVienId, @Param("khoaId") Long khoaId);
 }

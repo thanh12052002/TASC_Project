@@ -63,4 +63,10 @@ public class SinhVienService {
         List<MonDangKyResponse> responseList = monHocService.getInfoMonDangKy(sinhVien.getId(),khoaId,kyHocId);
         return responseList;
     }
+
+    public SinhVienKhoa getInfoSinhVienKhoa(Long khoaId){
+        SinhVien sinhVien = securityUtils.getCurrentSinhVien();
+        SinhVienKhoa svk = sinhVienKhoaRepository.getInfoById(sinhVien.getId(),khoaId);
+        return svk;
+    }
 }

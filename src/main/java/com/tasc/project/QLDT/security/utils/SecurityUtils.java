@@ -21,6 +21,7 @@ public class SecurityUtils {
     private final ISinhVienRepository sinhVienRepository;
     private final IGiangVienRepository giangVienRepository;
 
+    public static final int MAX_TIN_CHI = 24;
     public String getUserNameByContext(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()){

@@ -2,9 +2,12 @@ package com.tasc.project.QLDT.model.student;
 
 import com.tasc.project.QLDT.model.schedule.LopHocPhan;
 import jakarta.persistence.*;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
 @Entity
+@Setter
 @Table(name = "dang_ky_mon_hoc")
 public class DangKyMonHoc {
 

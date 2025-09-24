@@ -3,6 +3,7 @@ package com.tasc.project.QLDT.business.mon_hoc.payload.response;
 import java.time.LocalDateTime;
 
 public interface MonDangKyResponse {
+    Long getSinhVienKhoaId();
     Long getMonHocId();
 
     Long getMonHocKyHocId();

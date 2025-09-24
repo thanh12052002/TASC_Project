@@ -2,8 +2,10 @@ package com.tasc.project.QLDT.model.schedule;
 
 import com.tasc.project.QLDT.model.academic.MonHocKyHoc;
 import com.tasc.project.QLDT.model.student.DangKyMonHoc;
+import com.tasc.project.QLDT.model.student.DangKyMonTam;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ import java.util.Set;
 
 @Entity
 @Getter
+@Setter
 public class LopHocPhan {
 
     @Id
@@ -41,4 +44,13 @@ public class LopHocPhan {
 
     @OneToMany(mappedBy = "lopHocPhan")
     private List<LichHoc> lichHocs = new ArrayList<>();
+
+    @OneToMany(mappedBy = "lopHocPhan")
+    private List<DangKyMonTam> dangKyMonTams = new ArrayList<>() ;
+
+    LopHocPhan(Long id){
+        this.id = id;
+    }
+
+    LopHocPhan(){}
 }

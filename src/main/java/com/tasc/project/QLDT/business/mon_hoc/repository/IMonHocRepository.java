@@ -4,6 +4,7 @@ import com.tasc.project.QLDT.business.mon_hoc.payload.response.MonDangKyResponse
 import com.tasc.project.QLDT.model.academic.MonHoc;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ public interface IMonHocRepository extends JpaRepository<MonHoc,Long> {
                   AND kh.id = :kyHocId
         )
         SELECT
+            mhm.svk_id as sinh_vien_khoa_id,
             mhm.mon_hoc_id,
             mhm.ten_mon_hoc,
             mhm.so_tin_chi,
@@ -53,4 +55,8 @@ public interface IMonHocRepository extends JpaRepository<MonHoc,Long> {
         FROM mon_hoc_mo mhm
     """, nativeQuery = true)
     List<MonDangKyResponse> getInfoDangKy(Long sinhVienId, Long khoaId, Long kyHocId);
+
+    @Query("SELECT mh FROM LopHocPhan lhp JOIN lhp.monHocKyHoc mhkh " +
+            "JOIN mhkh.monHoc mh WHERE lhp.id = :lopHocPhanId")
+    MonHoc getMonHocByLhp(@Param("lopHocPhanId") Long lopHocPhanId);
 }
