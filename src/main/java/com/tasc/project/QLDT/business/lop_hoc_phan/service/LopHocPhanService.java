@@ -57,8 +57,8 @@ public class LopHocPhanService {
                                 .filter(k1 -> kips2.contains(k1)).collect(Collectors.toList());
                         if (!kipTrung.isEmpty()){
                             TrungLichErrorResponse trungLichErrorResponse = new TrungLichErrorResponse();
-                            trungLichErrorResponse.setLopHocPhanId1(lhp1.getId());
-                            trungLichErrorResponse.setLopHocPhanId2(lhp2.getId());
+                            trungLichErrorResponse.setLhp1(lhp1);
+                            trungLichErrorResponse.setLhp2(lhp2);
                             trungLichErrorResponse.setTuan(tuan1);
                             trungLichErrorResponse.setThu(thu1);
                             trungLichErrorResponse.setKipTrung(kipTrung);

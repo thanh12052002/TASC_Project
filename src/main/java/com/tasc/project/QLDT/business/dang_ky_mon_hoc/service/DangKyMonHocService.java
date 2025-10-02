@@ -1,6 +1,7 @@
 package com.tasc.project.QLDT.business.dang_ky_mon_hoc.service;
 
 import com.tasc.project.QLDT.business.dang_ky_mon_hoc.payload.response.DangKyResponse;
+import com.tasc.project.QLDT.business.dang_ky_mon_hoc.payload.response.MonChuaDatDTO;
 import com.tasc.project.QLDT.business.dang_ky_mon_hoc.repository.IDangKyMonHoc;
 import com.tasc.project.QLDT.business.dang_ky_tam.service.DangKyTamService;
 import com.tasc.project.QLDT.business.lop_hoc_phan.payload.response.SlotErrorResponse;
@@ -18,7 +19,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,12 +66,27 @@ public class DangKyMonHocService {
         if (!dangKyResponse.isStatus()){
             return dangKyResponse;
         }
+        //check mon tien quyet
+        List<MonChuaDatDTO> monChuaDatDTOS = iDangKyMonHoc.checkKetQua(sinhVienKhoaId);
+        if (!monChuaDatDTOS.isEmpty()){
+            dangKyResponse.setStatus(false);
+            String message = monChuaDatDTOS.stream()
+                    .map((dto) -> generateTienQuyetErrors(dto))
+                    .collect(Collectors.joining("\n"));
+            dangKyResponse.setMessage(message);
+        }
+        //
+        if(!dangKyResponse.isStatus()){
+            return dangKyResponse;
+        }
         //check trung lich hoc
         TrungLichResponse trungLichResponse = lopHocPhanService.validateTrungLich(lopHocPhans);
         if (!trungLichResponse.isStatus()){
             dangKyResponse.setStatus(false);
             List<TrungLichErrorResponse> trungLichErrorResponses = trungLichResponse.getLichErrorResponses();
-            String message  = "Cac lop hoc phan bi trung lich";
+            String message = "Cac lop hoc phan bi trung lich\n" + trungLichErrorResponses.stream()
+                    .map((k) -> generateTrungLichErrors(k))
+                    .collect(Collectors.joining("\n"));
             dangKyResponse.setMessage(message);
         }
         if (!dangKyResponse.isStatus()){
@@ -84,5 +102,31 @@ public class DangKyMonHocService {
         }
         dangKyResponse.setMessage("Đăng ký thành công");
         return dangKyResponse;
+    }
+
+    private String generateTrungLichErrors(TrungLichErrorResponse trungLichErrorResponse){
+        StringBuilder errorTrungLich = new StringBuilder();
+        errorTrungLich.append("Môn học trùng: ").append(trungLichErrorResponse.getLhp1().getMonHocKyHoc().getMonHoc().getTen())
+                .append("-").append(trungLichErrorResponse.getLhp2().getMonHocKyHoc().getMonHoc().getTen())
+                .append("\n").append("Lớp học phần trùng: ")
+                .append(trungLichErrorResponse.getLhp1().getTen())
+                .append("-").append(trungLichErrorResponse.getLhp2().getTen()).append("\n")
+                .append("tuần: ").append(trungLichErrorResponse.getTuan()).append("-")
+                .append("thứ: ").append(trungLichErrorResponse.getThu()).append("\n")
+                .append("kip: ").append(
+                        trungLichErrorResponse.getKipTrung().stream()
+                                .map((k) -> k.toString())
+                                .collect(Collectors.joining(", "))
+                );
+        return errorTrungLich.toString();
+    }
+
+    private String generateTienQuyetErrors(MonChuaDatDTO monChuaDatDTO){
+        String[] a = monChuaDatDTO.getDanhSachTienQuyetChuaDat().split(";");
+        String listMonTienQUyet = Arrays.stream(a)
+                .map((k) -> k.split(":")[1])
+                .collect(Collectors.joining(", "));
+        return "Môn đăng ký: " + monChuaDatDTO.getTenMonHoc() +
+                " chưa hoàn thành các môn tiên quyết: " + listMonTienQUyet;
     }
 }

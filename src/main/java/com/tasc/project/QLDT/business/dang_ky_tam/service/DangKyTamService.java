@@ -1,5 +1,6 @@
 package com.tasc.project.QLDT.business.dang_ky_tam.service;
 
+import com.tasc.project.QLDT.business.dang_ky_tam.converter.DangKyTamConvert;
 import com.tasc.project.QLDT.business.dang_ky_tam.payload.response.DangKyTamDto;
 import com.tasc.project.QLDT.business.dang_ky_tam.payload.response.DangKyTamResponse;
 import com.tasc.project.QLDT.business.dang_ky_tam.repository.IDangKyTamRepository;
@@ -80,6 +81,12 @@ public class DangKyTamService {
     public List<DangKyMonTam> getPickTamList(Long sinhVienKhoaId){
         List<DangKyMonTam> dangKyMonTams = dangKyTamRepository.findAllDangKyTam(sinhVienKhoaId);
         return dangKyMonTams;
+    }
+
+    public List<DangKyTamDto> getDanhSachTam(Long sinhVienKhoaId){
+
+        List<DangKyTamDto> dangKyTamDtos = DangKyTamConvert.toDangKyTamDto(getPickTamList(sinhVienKhoaId));
+        return dangKyTamDtos;
     }
     public void removePickTam(Long sinhVienId){
 

@@ -29,7 +29,8 @@ public interface IDangKyTamRepository extends JpaRepository<DangKyMonTam,Long> {
                                         @Param("lopHocPhanId") Long lopHocPhanId);
     @Query("SELECT dkt FROM DangKyMonTam dkt " +
             "JOIN FETCH dkt.lopHocPhan lhp " +
-            "JOIN FETCH lhp.monHocKyHoc " +
+            "JOIN FETCH lhp.monHocKyHoc mhkh " +
+            "JOIN FETCH mhkh.monHoc mh " +
             "WHERE dkt.sinhVienKhoa.id = :sinhVienKhoaId ")
     List<DangKyMonTam> findAllDangKyTam(@Param("sinhVienKhoaId") Long sinhVienKhoaId);
 }
